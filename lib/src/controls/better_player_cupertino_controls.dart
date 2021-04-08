@@ -147,6 +147,9 @@ class _BetterPlayerCupertinoControlsState
     if (!betterPlayerController!.controlsEnabled) {
       return const SizedBox();
     }
+    final orientation = MediaQuery.of(context).orientation;
+    final buttonPadding = orientation == Orientation.portrait ? 16.0 : 24.0;
+
     return AnimatedOpacity(
       opacity: _hideStuff ? 0.0 : 1.0,
       duration: _controlsConfiguration.controlsHideTime,
@@ -176,6 +179,17 @@ class _BetterPlayerCupertinoControlsState
                           const SizedBox(),
                         const SizedBox(width: 8),
                         _buildLiveWidget(),
+
+                        if (_controlsConfiguration.enableMute)
+                          _buildMuteButton(_controller, backgroundColor, iconColor, barHeight, buttonPadding)
+                        else
+                          const SizedBox(),
+
+                        if (_controlsConfiguration.enableFullscreen)
+                          _buildExpandButton(backgroundColor, iconColor, barHeight, buttonPadding)
+                        else
+                          const SizedBox(),
+
                       ],
                     )
                   : Row(
@@ -372,7 +386,42 @@ class _BetterPlayerCupertinoControlsState
       ),
     );
   }
-
+  GestureDetector _buildCloseButton(
+      VideoPlayerController? controller,
+      Color backgroundColor,
+      Color iconColor,
+      double barHeight,
+      double buttonPadding,
+      ) {
+    return GestureDetector(
+      onTap: () {
+        cancelAndRestartTimer();
+        betterPlayerController!.closeClic();
+      },
+      child: AnimatedOpacity(
+        opacity: _hideStuff ? 0.0 : 1.0,
+        duration: _controlsConfiguration.controlsHideTime,
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(10.0),
+          child: BackdropFilter(
+            filter: ui.ImageFilter.blur(sigmaX: 10.0),
+            child: Container(
+              color: backgroundColor,
+              child: Container(
+                height: barHeight,
+                padding: EdgeInsets.symmetric(
+                  horizontal: buttonPadding,
+                ),
+                child: Icon(_controlsConfiguration.closeIcon,
+                  color: iconColor,
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
   GestureDetector _buildPlayPause(
     VideoPlayerController controller,
     Color iconColor,
@@ -474,11 +523,28 @@ class _BetterPlayerCupertinoControlsState
         right: marginSize,
         left: marginSize,
       ),
-      child: Row(
+      child: betterPlayerController!.isLiveStream()? Row(
         children: <Widget>[
-          if (_controlsConfiguration.enableFullscreen)
-            _buildExpandButton(
+          if (_controlsConfiguration.enableClose)
+          _buildCloseButton(_controller, backgroundColor, iconColor, barHeight, buttonPadding)
+          else
+            const SizedBox(),
+
+          Expanded(child: Container()),
+          if (_controlsConfiguration.enablePip)
+            _buildPipButton(
                 backgroundColor, iconColor, barHeight, buttonPadding)
+          else
+            const SizedBox(),
+        ],
+      ):Row(
+        children: <Widget>[
+          if (_controlsConfiguration.enableClose)
+            _buildCloseButton(_controller, backgroundColor, iconColor, barHeight, buttonPadding)
+          else
+            const SizedBox(),
+          if (_controlsConfiguration.enableFullscreen)
+            _buildExpandButton(backgroundColor, iconColor, barHeight, buttonPadding)
           else
             const SizedBox(),
           if (_controlsConfiguration.enablePip)
@@ -486,6 +552,7 @@ class _BetterPlayerCupertinoControlsState
                 backgroundColor, iconColor, barHeight, buttonPadding)
           else
             const SizedBox(),
+
           Expanded(child: Container()),
           if (_controlsConfiguration.enableMute)
             _buildMuteButton(_controller, backgroundColor, iconColor, barHeight,

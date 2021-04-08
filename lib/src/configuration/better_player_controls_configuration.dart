@@ -31,6 +31,9 @@ class BetterPlayerControlsConfiguration {
   ///Icon of mute
   final IconData muteIcon;
 
+  ///Icon of mute
+  final IconData closeIcon;
+
   ///Icon of unmute
   final IconData unMuteIcon;
 
@@ -51,6 +54,8 @@ class BetterPlayerControlsConfiguration {
 
   ///Flag used to enable/disable mute
   final bool enableMute;
+
+  final bool enableClose;
 
   ///Flag used to enable/disable progress texts
   final bool enableProgressText;
@@ -176,12 +181,14 @@ class BetterPlayerControlsConfiguration {
       this.pauseIcon = Icons.pause,
       this.muteIcon = Icons.volume_up,
       this.unMuteIcon = Icons.volume_mute,
+      this.closeIcon= Icons.clear,
       this.fullscreenEnableIcon = Icons.fullscreen,
       this.fullscreenDisableIcon = Icons.fullscreen_exit,
       this.skipBackIcon = Icons.fast_rewind,
       this.skipForwardIcon = Icons.fast_forward,
       this.enableFullscreen = true,
       this.enableMute = true,
+      this.enableClose= true,
       this.enableProgressText = true,
       this.enableProgressBar = true,
       this.enableProgressBarDrag = true,

@@ -175,23 +175,16 @@ class _BetterPlayerMaterialControlsState
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        AnimatedOpacity(
+
+        if (_controlsConfiguration.enableClose)
+          AnimatedOpacity(
           opacity: _hideStuff ? 0.0 : 1.0,
           duration: _controlsConfiguration.controlsHideTime,
           onEnd: _onPlayerHide,
-          child:
-          BetterPlayerMaterialClickableWidget(
-            onTap: (){
-              betterPlayerController!.closeClic();
-            } ,
-              child: Padding(
-                padding: const EdgeInsets.all(10),
-                child: Icon(Icons.clear,color: betterPlayerControlsConfiguration.iconsColor,),
-              )
-
-          )
-          
-        ),
+          child: _buildCloseButton()
+        )
+        else
+          const SizedBox(),
         Row(mainAxisAlignment: MainAxisAlignment.end, children: [
           if (_controlsConfiguration.enablePip)
             _buildPipButtonWrapperWidget(_hideStuff, _onPlayerHide)
@@ -277,6 +270,18 @@ class _BetterPlayerMaterialControlsState
           color: _controlsConfiguration.iconsColor,
         ),
       ),
+    );
+  }
+  Widget _buildCloseButton(){
+    return BetterPlayerMaterialClickableWidget(
+        onTap: (){
+          betterPlayerController!.closeClic();
+        } ,
+        child: Padding(
+          padding: const EdgeInsets.all(10),
+          child: Icon(Icons.clear,color: betterPlayerControlsConfiguration.iconsColor,),
+        )
+
     );
   }
 

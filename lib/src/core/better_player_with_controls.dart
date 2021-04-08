@@ -182,7 +182,7 @@ class _BetterPlayerWithControlsState extends State<BetterPlayerWithControls> {
       } else if (playerTheme == BetterPlayerTheme.material) {
         return _buildMaterialControl();
       } else if (playerTheme == BetterPlayerTheme.cupertino) {
-        return _buildMaterialControl();
+        return _buildCupertinoControl();
       }
     }
 
